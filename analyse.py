@@ -1967,7 +1967,7 @@ with tab7:
 
     st.markdown(
         """
-Nous sommes un groupe de **6 étudiants en 3e année de BUT Sciences des Données**
+Nous sommes un groupe d' **étudiants en 3e année de BUT Sciences des Données**
 (promo 2025-2026).
 
 
@@ -1976,17 +1976,61 @@ Nous sommes un groupe de **6 étudiants en 3e année de BUT Sciences des Donnée
 Dans le cadre d’une SAE autour de l’analyse des contenus publiés par des clubs de football sur les réseaux sociaux, 
 cette étude à pour objectif de :
 
-- Comparer la performance des contenus
-- Identifier les facteurs de performance
+- Comparer la performance des contenus 
+- Identifier les facteurs de performance des publications
 - Proposer des recommandations **data-driven**
   afin d’optimiser les publications sur les réseaux sociaux
 
 ### Présentation du projet
 
-👉 [Voir la présentation Canva](<placeholder>)
+👉 [Voir la présentation Canva](<https://canva.link/41103e3y4s4d3vc>)
 
 ---
 
+"""
+    )
+
+st.markdown(
+    """
+### Note Méthodologique
+
+#### Construction du score
+
+Afin de comparer les performances des contenus entre clubs et plateformes, nous avons construit un **score de performance normalisé** basé sur les interactions rapportées au nombre de followers.
+
+Le score combine les interactions totales par 1 000 followers , les likes par 1 000 followers et les commentaires par 1 000 followers.
+
+###### Formule utilisée
+"""
+    )   
+
+st.latex(
+    r"score = 0.5 \times Interactions_{1k} + 0.3 \times Likes_{1k} + 0.2 \times Commentaires_{1k}"
+)
+
+st.markdown(
+    """
+
+#### Catégorisation des contenus
+
+Les publications ont été classées automatiquement en plusieurs thématiques grâce à une détection de mots-clés dans les titres des contenus.
+
+Exemples de catégories :
+- Match / résultat
+- Joueur / star
+- Fans / communauté
+- Annonce / communication
+- Fun / divertissement
+
+Cette catégorisation permet d’analyser les formats et sujets générant le plus d’engagement sur les réseaux sociaux.
+
+---
+
+"""
+)
+
+st.markdown(
+    """
 ### Auteurs
 
 - William LEFEBVRE 
@@ -1997,9 +2041,8 @@ Ainsi que
 - Matteo CAI
 - Terryl HASSEN
 - Leo JEAN UNITE
-
-"""
-    )
+    """
+)
 
 # =========================================================
 # SYNTHÈSE
