@@ -28,19 +28,20 @@ ORDER_DAYS = [
 # =========================================================
 
 @st.cache_data
-def load_data(file):
+def load_data(file_path):
 
-    if file.name.endswith(".xlsx"):
-        df = pd.read_excel(file)
+    if file_path.endswith(".xlsx"):
+
+        df = pd.read_excel(file_path)
 
     else:
+
         df = pd.read_csv(
-            file,
+            file_path,
             decimal=","
         )
 
     return df
-
 
 # =========================================================
 # CLASSIFICATION THEMATIQUE
@@ -306,24 +307,13 @@ Analyse comparative des performances Instagram et TikTok.
 """
 )
 
-uploaded_file = st.file_uploader(
-    "Importer un fichier Excel ou CSV",
-    type=["xlsx", "csv"]
-)
-
-if uploaded_file is None:
-
-    st.info(
-        "Ajoute ton fichier Excel."
-    )
-
-    st.stop()
-
 # =========================================================
-# LOAD
+# LOAD DATA LOCAL
 # =========================================================
 
-df_raw = load_data(uploaded_file)
+FILE_PATH = "data/fichiers_communs_publications.xlsx"
+
+df_raw = load_data(FILE_PATH)
 
 df = prepare_data(df_raw)
 
@@ -555,9 +545,9 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
     "Plateformes",
     "Formats",
     "Thématiques",
-    "Top contenus",
     "Temporalité",
-    "Corrélations"
+    "Top contenus",
+    "À propos"
 ])
 
 # =========================================================
@@ -1263,154 +1253,10 @@ with tab4:
     )
 
 # =========================================================
-# TAB TOP CONTENTS
+# TAB 5 - TEMPORALITE
 # =========================================================
 
 with tab5:
-
-    st.subheader("Top contenus")
-
-    # =====================================================
-    # CHOIX DU TRI
-    # =====================================================
-
-    score_options = {
-
-        "Score global": "score",
-
-        "Interactions totales": "Interactions_totales",
-
-        "Likes": "Likes",
-
-        "Commentaires": "Commentaires",
-
-        "Partages": "Partages",
-
-        "Likes par 1k followers": "Likes_par_1k_followers",
-
-        "Commentaires par 1k followers": "Commentaires_par_1k_followers",
-
-        "Interactions par 1k followers": "Interactions_totales_par_1k_followers",
-
-        "TikTok views": "tiktok_views",
-
-        "Nombre de collaborateurs": "insta_collaborators_nb",
-
-        "Nombre de mentions": "x_insta_nb_mentions"
-    }
-
-    selected_metric = st.selectbox(
-        "Classer les contenus par",
-        list(score_options.keys())
-    )
-
-    sort_col = score_options[selected_metric]
-
-    # =====================================================
-    # NOMBRE DE POSTS
-    # =====================================================
-
-    top_n = st.slider(
-        "Nombre de contenus",
-        min_value=5,
-        max_value=30,
-        value=10
-    )
-
-    # =====================================================
-    # TABLE TOP POSTS
-    # =====================================================
-
-    cols_to_show = [
-
-        "Date",
-        "createur_nom",
-        "Platforme",
-        "media_type",
-        "Theme",
-        "Context",
-
-        "Titre",
-
-        "Interactions_totales",
-        "Likes",
-        "Commentaires",
-        "Partages",
-
-        "Interactions_totales_par_1k_followers",
-        "Likes_par_1k_followers",
-        "Commentaires_par_1k_followers",
-
-        "tiktok_views",
-        "insta_collaborators_nb",
-        "x_insta_nb_mentions",
-
-        "score",
-
-        "URL"
-    ]
-
-    existing_cols = [
-        c
-        for c in cols_to_show
-        if c in df_filtered.columns
-    ]
-
-    top_contents = (
-
-        df_filtered
-
-        .sort_values(
-            sort_col,
-            ascending=False
-        )
-
-        [existing_cols]
-
-        .head(top_n)
-    )
-
-    st.dataframe(
-        top_contents.style.format(TABLE_FORMAT),
-        use_container_width=True
-    )
-
-    # =====================================================
-    # TOP 3 PAR CLUB
-    # =====================================================
-
-    st.subheader("Top 3 par club")
-
-    top_by_club = (
-
-        df_filtered
-
-        .sort_values(
-            sort_col,
-            ascending=False
-        )
-
-        .groupby(
-            "createur_nom",
-            group_keys=False
-        )
-
-        .head(3)
-
-        [existing_cols]
-    )
-
-    st.dataframe(
-        top_by_club.style.format(TABLE_FORMAT),
-        use_container_width=True
-    )
-
-
-# =========================================================
-# TAB 6 - TEMPORALITE
-# =========================================================
-
-with tab6:
 
     st.subheader("Analyse temporelle")
 
@@ -1820,14 +1666,6 @@ with tab6:
     )
 
 
-    # by_date.columns = [
-    #     "date",
-    #     "nb_posts",
-    #     "score_moyen",
-    #     "interactions_moyennes",
-    #     "likes_1k"
-    # ]
-
     st.dataframe(
         by_date.style.format(TABLE_FORMAT),
         use_container_width=True
@@ -1977,301 +1815,190 @@ with tab6:
     )
 
 # =========================================================
-# TAB 7 - CORRELATIONS
+# TAB TOP CONTENTS
+# =========================================================
+
+with tab6:
+
+    st.subheader("Top contenus")
+
+    # =====================================================
+    # CHOIX DU TRI
+    # =====================================================
+
+    score_options = {
+
+        "Score global": "score",
+
+        "Interactions totales": "Interactions_totales",
+
+        "Likes": "Likes",
+
+        "Commentaires": "Commentaires",
+
+        "Partages": "Partages",
+
+        "Likes par 1k followers": "Likes_par_1k_followers",
+
+        "Commentaires par 1k followers": "Commentaires_par_1k_followers",
+
+        "Interactions par 1k followers": "Interactions_totales_par_1k_followers",
+
+        "TikTok views": "tiktok_views",
+
+        "Nombre de collaborateurs": "insta_collaborators_nb",
+
+        "Nombre de mentions": "x_insta_nb_mentions"
+    }
+
+    selected_metric = st.selectbox(
+        "Classer les contenus par",
+        list(score_options.keys())
+    )
+
+    sort_col = score_options[selected_metric]
+
+    # =====================================================
+    # NOMBRE DE POSTS
+    # =====================================================
+
+    top_n = st.slider(
+        "Nombre de contenus",
+        min_value=5,
+        max_value=30,
+        value=10
+    )
+
+    # =====================================================
+    # TABLE TOP POSTS
+    # =====================================================
+
+    cols_to_show = [
+
+        "Date",
+        "createur_nom",
+        "Platforme",
+        "media_type",
+        "Theme",
+        "Context",
+
+        "Titre",
+
+        "Interactions_totales",
+        "Likes",
+        "Commentaires",
+        "Partages",
+
+        "Interactions_totales_par_1k_followers",
+        "Likes_par_1k_followers",
+        "Commentaires_par_1k_followers",
+
+        "tiktok_views",
+        "insta_collaborators_nb",
+        "x_insta_nb_mentions",
+
+        "score",
+
+        "URL"
+    ]
+
+    existing_cols = [
+        c
+        for c in cols_to_show
+        if c in df_filtered.columns
+    ]
+
+    top_contents = (
+
+        df_filtered
+
+        .sort_values(
+            sort_col,
+            ascending=False
+        )
+
+        [existing_cols]
+
+        .head(top_n)
+    )
+
+    st.dataframe(
+        top_contents.style.format(TABLE_FORMAT),
+        use_container_width=True
+    )
+
+    # =====================================================
+    # TOP 3 PAR CLUB
+    # =====================================================
+
+    st.subheader("Top 3 par club")
+
+    top_by_club = (
+
+        df_filtered
+
+        .sort_values(
+            sort_col,
+            ascending=False
+        )
+
+        .groupby(
+            "createur_nom",
+            group_keys=False
+        )
+
+        .head(3)
+
+        [existing_cols]
+    )
+
+    st.dataframe(
+        top_by_club.style.format(TABLE_FORMAT),
+        use_container_width=True
+    )
+
+# =========================================================
+# TAB A PROPOS
 # =========================================================
 
 with tab7:
 
-    st.subheader("Analyse des relations entre variables")
+    st.subheader("À propos du projet")
 
-    # =====================================================
-    # VARIABLES NUMERIQUES
-    # =====================================================
+    st.markdown(
+        """
+Nous sommes un groupe de **6 étudiants en 3e année de BUT Sciences des Données**
+(promo 2025-2026).
 
-    correlation_cols = [
 
-        "score",
+### Objectifs de l’étude
 
-        "Interactions_totales",
+Dans le cadre d’une SAE autour de l’analyse des contenus publiés par des clubs de football sur les réseaux sociaux, 
+cette étude à pour objectif de :
 
-        "Likes",
+- Comparer la performance des contenus
+- Identifier les facteurs de performance
+- Proposer des recommandations **data-driven**
+  afin d’optimiser les publications sur les réseaux sociaux
 
-        "Commentaires",
+### Présentation du projet
 
-        "Likes_par_1k_followers",
+👉 [Voir la présentation Canva](<placeholder>)
 
-        "Commentaires_par_1k_followers",
+---
 
-        "Partages",
+### Auteurs
 
-        "Partages_par_1k_followers",
+- William LEFEBVRE 
+- Clara LAURENT 
+- Diego CASAS BARCENAS 
 
-        "tiktok_views"
-    ]
+Ainsi que
+- Matteo CAI
+- Terryl HASSEN
+- Leo JEAN UNITE
 
-    existing_corr_cols = [
-
-        col for col in correlation_cols
-        if col in df_filtered.columns
-    ]
-
-    corr_df = df_filtered[
-        existing_corr_cols
-    ].copy()
-
-    # conversion numérique sécurité
-    for col in existing_corr_cols:
-
-        corr_df[col] = pd.to_numeric(
-            corr_df[col],
-            errors="coerce"
-        )
-
-    # =====================================================
-    # MATRICE DE CORRELATION
-    # =====================================================
-
-    st.markdown("## Matrice de corrélation")
-
-    corr_matrix = corr_df.corr(
-        numeric_only=True
-    )
-
-    st.dataframe(
-        corr_matrix.style.format(TABLE_FORMAT),
-        use_container_width=True
-    )
-
-    fig = px.imshow(
-
-        corr_matrix,
-
-        text_auto=".2f",
-
-        aspect="auto",
-
-        title="Heatmap des corrélations"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-    # =====================================================
-    # SCATTER SCORE / LIKES
-    # =====================================================
-
-    st.markdown("---")
-
-    st.markdown("## Score vs Likes")
-
-    fig = px.scatter(
-
-        df_filtered,
-
-        x="Likes",
-
-        y="score",
-
-        color="Platforme",
-
-        hover_data=[
-            "createur_nom",
-            "Titre"
-        ],
-
-        trendline="ols",
-
-        title="Relation entre score et likes"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-    # =====================================================
-    # SCATTER SCORE / INTERACTIONS
-    # =====================================================
-
-    st.markdown("---")
-
-    st.markdown("## Score vs Interactions")
-
-    fig = px.scatter(
-
-        df_filtered,
-
-        x="Interactions_totales",
-
-        y="score",
-
-        color="Platforme",
-
-        hover_data=[
-            "createur_nom",
-            "Titre"
-        ],
-
-        trendline="ols",
-
-        title="Relation entre score et interactions"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-    # =====================================================
-    # SCATTER LIKES_1K / COMMENTAIRES_1K
-    # =====================================================
-
-    st.markdown("---")
-
-    st.markdown("## Likes / Commentaires par 1k followers")
-
-    fig = px.scatter(
-
-        df_filtered,
-
-        x="Likes_par_1k_followers",
-
-        y="Commentaires_par_1k_followers",
-
-        color="createur_nom",
-
-        size="score",
-
-        hover_data=[
-            "Titre",
-            "Platforme"
-        ],
-
-        title="Likes vs commentaires normalisés"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
-    )
-
-    # =====================================================
-    # TIKTOK VIEWS
-    # =====================================================
-
-    if "tiktok_views" in df_filtered.columns:
-
-        st.markdown("---")
-
-        st.markdown("## TikTok views et performance")
-
-        fig = px.scatter(
-
-            df_filtered,
-
-            x="tiktok_views",
-
-            y="score",
-
-            color="createur_nom",
-
-            hover_data=[
-                "Titre"
-            ],
-
-            trendline="ols",
-
-            title="Relation entre TikTok views et score"
-        )
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
-
-    # =====================================================
-    # PARTAGES
-    # =====================================================
-
-    if "Partages" in df_filtered.columns:
-
-        st.markdown("---")
-
-        st.markdown("## Partages et score")
-
-        fig = px.scatter(
-
-            df_filtered,
-
-            x="Partages",
-
-            y="score",
-
-            color="Platforme",
-
-            hover_data=[
-                "Titre",
-                "createur_nom"
-            ],
-
-            trendline="ols",
-
-            title="Relation entre partages et score"
-        )
-
-        st.plotly_chart(
-            fig,
-            use_container_width=True
-        )
-
-    # =====================================================
-    # TOP CORRELATIONS
-    # =====================================================
-
-    st.markdown("---")
-
-    st.markdown("## Corrélations avec le score")
-
-    score_corr = (
-
-        corr_matrix["score"]
-
-        .sort_values(
-            ascending=False
-        )
-
-        .reset_index()
-    )
-
-    score_corr.columns = [
-        "variable",
-        "correlation_avec_score"
-    ]
-
-    st.dataframe(
-        score_corr.style.format(TABLE_FORMAT),
-        use_container_width=True
-    )
-
-    fig = px.bar(
-
-        score_corr,
-
-        x="variable",
-        y="correlation_avec_score",
-
-        text_auto=".2f",
-
-        color="correlation_avec_score",
-
-        title="Variables les plus corrélées au score"
-    )
-
-    st.plotly_chart(
-        fig,
-        use_container_width=True
+"""
     )
 
 # =========================================================
