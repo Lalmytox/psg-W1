@@ -1983,7 +1983,7 @@ cette étude à pour objectif de :
 
 ### Présentation du projet
 
-👉 [Voir la présentation Canva](<https://canva.link/41103e3y4s4d3vc>)
+👉 [Voir la présentation Canva](<https://canva.link/gfdxg1nzo282dke>)
 
 ---
 
@@ -2040,7 +2040,7 @@ st.markdown(
 Ainsi que
 - Matteo CAI
 - Terryl HASSEN
-- Leo JEAN UNITE
+- Leo-Jean UNITE
     """
 )
 
