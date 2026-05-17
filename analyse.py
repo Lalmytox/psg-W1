@@ -1967,82 +1967,82 @@ with tab7:
 
     st.markdown(
         """
-Nous sommes un groupe d' **étudiants en 3e année de BUT Sciences des Données**
-(promo 2025-2026).
+    Nous sommes un groupe d' **étudiants en 3e année de BUT Sciences des Données**
+    (promo 2025-2026).
 
 
-### Objectifs de l’étude
+    ### Objectifs de l’étude
 
-Dans le cadre d’une SAE autour de l’analyse des contenus publiés par des clubs de football sur les réseaux sociaux, 
-cette étude à pour objectif de :
+    Dans le cadre d’une SAE autour de l’analyse des contenus publiés par des clubs de football sur les réseaux sociaux, 
+    cette étude à pour objectif de :
 
-- Comparer la performance des contenus 
-- Identifier les facteurs de performance des publications
-- Proposer des recommandations **data-driven**
-  afin d’optimiser les publications sur les réseaux sociaux
+    - Comparer la performance des contenus 
+    - Identifier les facteurs de performance des publications
+    - Proposer des recommandations **data-driven**
+    afin d’optimiser les publications sur les réseaux sociaux
 
-### Présentation du projet
+    ### Présentation du projet
 
-👉 [Voir la présentation Canva](<https://canva.link/gfdxg1nzo282dke>)
+    👉 [Voir la présentation Canva](<https://canva.link/gfdxg1nzo282dke>)
 
----
+    ---
 
-"""
+    """
     )
 
-st.markdown(
+    st.markdown(
+        """
+    ### Note Méthodologique
+
+    #### Construction du score
+
+    Afin de comparer les performances des contenus entre clubs et plateformes, nous avons construit un **score de performance normalisé** basé sur les interactions rapportées au nombre de followers.
+
+    Le score combine les interactions totales par 1 000 followers , les likes par 1 000 followers et les commentaires par 1 000 followers.
+
+    ###### Formule utilisée
     """
-### Note Méthodologique
+        )   
 
-#### Construction du score
+    st.latex(
+        r"score = 0.5 \times Interactions_{1k} + 0.3 \times Likes_{1k} + 0.2 \times Commentaires_{1k}"
+    )
 
-Afin de comparer les performances des contenus entre clubs et plateformes, nous avons construit un **score de performance normalisé** basé sur les interactions rapportées au nombre de followers.
+    st.markdown(
+        """
 
-Le score combine les interactions totales par 1 000 followers , les likes par 1 000 followers et les commentaires par 1 000 followers.
+    #### Catégorisation des contenus
 
-###### Formule utilisée
-"""
-    )   
+    Les publications ont été classées automatiquement en plusieurs thématiques grâce à une détection de mots-clés dans les titres des contenus.
 
-st.latex(
-    r"score = 0.5 \times Interactions_{1k} + 0.3 \times Likes_{1k} + 0.2 \times Commentaires_{1k}"
-)
+    Exemples de catégories :
+    - Match / résultat
+    - Joueur / star
+    - Fans / communauté
+    - Annonce / communication
+    - Fun / divertissement
 
-st.markdown(
+    Cette catégorisation permet d’analyser les formats et sujets générant le plus d’engagement sur les réseaux sociaux.
+
+    ---
+
     """
+    )
 
-#### Catégorisation des contenus
+    st.markdown(
+        """
+    ### Auteurs
 
-Les publications ont été classées automatiquement en plusieurs thématiques grâce à une détection de mots-clés dans les titres des contenus.
+    - William LEFEBVRE 
+    - Clara LAURENT 
+    - Diego CASAS BARCENAS 
 
-Exemples de catégories :
-- Match / résultat
-- Joueur / star
-- Fans / communauté
-- Annonce / communication
-- Fun / divertissement
-
-Cette catégorisation permet d’analyser les formats et sujets générant le plus d’engagement sur les réseaux sociaux.
-
----
-
-"""
-)
-
-st.markdown(
-    """
-### Auteurs
-
-- William LEFEBVRE 
-- Clara LAURENT 
-- Diego CASAS BARCENAS 
-
-Ainsi que
-- Matteo CAI
-- Terryl HASSEN
-- Leo-Jean UNITE
-    """
-)
+    Ainsi que
+    - Matteo CAI
+    - Terryl HASSEN
+    - Leo-Jean UNITE
+        """
+    )
 
 # =========================================================
 # SYNTHÈSE
